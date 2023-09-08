@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    {% include 'quizzes/partials/head.html' %}
+    <title>{% block title %}{% endblock title %} Quizhero</title>
+</head>
+
+<body>
+    <main class="main-content-container">
+        {% block content %}{% endblock content %}
+    </main>
+
+    {% include 'quizzes/partials/footer.html' %}
+
+    
+    <script src="{% static 'quizzes/js/script.js' %}" defer data-quizzes="{{ quizzes }}"></script>
+    {{ quizzes|json_script }}
+</body>
+</html>

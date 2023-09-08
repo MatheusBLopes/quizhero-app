@@ -11,3 +11,6 @@ run-gunicorn:
 
 test:
 	poetry run pytest -sx $(PROJECT_NAME) --reuse-db --create-db
+
+collect-static:
+	poetry run python quizhero-app/manage.py collectstatic
