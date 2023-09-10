@@ -39,10 +39,11 @@ def make_answer(number):
         'right_answer': True if number % 2 == 0 else False
     }
 
-def make_question():
+def make_question(number):
     return {
+        'numb': number,
         'question_description': fake.sentence(nb_words=12),
-        'answers': [make_answer(i) for i in range(3)]
+        'answers': [make_answer(i) for i in range(4)]
     }
 
 
@@ -51,7 +52,7 @@ def make_quiz():
         'id': fake.random_number(digits=2, fix_len=True),
         'title': fake.sentence(nb_words=6),
         'quiz_description': fake.sentence(nb_words=12),
-        'questions': [make_question() for _ in range(10)]
+        'questions': [make_question(i + 1) for i in range(10)]
 
     }
 

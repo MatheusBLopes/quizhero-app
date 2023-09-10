@@ -14,8 +14,6 @@
 
     {% include 'quizzes/partials/footer.html' %}
 
-    
-    <script src="{% static 'quizzes/js/script.js' %}" defer data-quizzes="{{ quizzes }}"></script>
-    {{ quizzes|json_script }}
+{% block scripts %}{% endblock scripts %}
 </body>
 </html>
