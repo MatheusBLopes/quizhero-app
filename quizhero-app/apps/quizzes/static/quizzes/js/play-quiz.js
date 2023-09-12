@@ -2,8 +2,6 @@ const quiz = JSON.parse(
     document.currentScript.nextElementSibling.textContent
   );
 
-console.log(quiz)
-
 const startBtn = document.querySelector('.start_btn button'),
 rules = document.querySelector('.rules'),
 exitBtn = rules.querySelector('.buttons .quit'),
@@ -69,7 +67,7 @@ const nextBtn = document.querySelector('footer .next_btn'),
 question_counter_down = document.querySelector('footer .total_que');
 
 nextBtn.onclick = () => {
-    if(queCount < quiz.length - 1) {
+    if(queCount < quiz.questions.length - 1) {
         queCount++;
         queNumber++;
         show_questions(queCount);
@@ -112,10 +110,16 @@ let crossIcon = '<div class="icon cross"><i class="fas fa-times"></i></div>'
 function optionSelected(answer) {
     clearInterval(counter)
     clearInterval(counterLine)
-    console.log(answer)
+
     let userAnswer = answer.textContent
     let correctAnswer = quiz.questions[queCount]
     const allOptions = optionsList.children.length
+
+    for (i = 0; i < quiz.questions[queCount].answers.length; i++) {
+        if(quiz.questions[queCount].answers[i].right_answer){
+            correctAnswer = quiz.questions[queCount].answers[i].answer_description
+        }
+    }
 
     if(userAnswer == correctAnswer) {
         userRating += 1
