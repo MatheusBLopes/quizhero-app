@@ -2,49 +2,30 @@ const quiz = JSON.parse(
     document.currentScript.nextElementSibling.textContent
   );
 
-const startBtn = document.querySelector('.start_btn button'),
-rules = document.querySelector('.rules'),
-exitBtn = rules.querySelector('.buttons .quit'),
-continueBtn = rules.querySelector('.buttons .restart'),
-quizBox = document.querySelector('.quiz_box'),
+const quizBox = document.querySelector('.quiz_box'),
 resultBox = document.querySelector('.result_box'),
 optionsList = document.querySelector('.options_list'),
-timeLine = document.querySelector('header .time_line'),
-timeText = document.querySelector('.timer .time_left_txt'),
-timeCount = document.querySelector('.timer .timer_sec'),
 restartQuiz = resultBox.querySelector('.buttons .restart'),
 leave = resultBox.querySelector('.buttons .quit');
 
 
-let timeValue = 15,
-queCount = 0,
+let queCount = 0,
 queNumber = 1,
 userRating = 0,
 counter,
 counterLine,
 widthValue = 0;
 
-startBtn.onclick = () => {
-    rules.classList.add("activeInfo")
-}
-
-exitBtn.onclock = () => {
-    rules.classList.remove("activeInfo")
-}
-
-continueBtn.onclick = () => {
-    rules.classList.remove("activeInfo")
+window.onload = function() {
     quizBox.classList.add("activeQuiz")
     show_questions(0)
     queCounter(1)
-    startTimer(15)
-    startTimerLine(0)
-}
+};
+
 
 restartQuiz.onclick = () => {
     quizBox.classList.add("activeQuiz");
     resultBox.classList.remove("activeResult");
-    timeValue = 15;
     queCount = 0;
     queNumber = 1;
     userRating = 0;
@@ -53,8 +34,6 @@ restartQuiz.onclick = () => {
     queCounter(queNumber);
     clearInterval(counter);
     clearInterval(counterLine);
-    startTimer(timeValue);
-    startTimerLine(widthValue);
     timeText.textContent = "Time Left";
     nextBtn.classList.remove('show')
 }
@@ -74,9 +53,6 @@ nextBtn.onclick = () => {
         queCounter(queNumber);
         clearInterval(counter);
         clearInterval(counterLine);
-        startTimerLine(widthValue);
-        startTimer(timeValue);
-        timeText.textContent = "Time Left"
         nextBtn.classList.remove("show")
     } else {
         clearInterval(counter);
@@ -148,7 +124,6 @@ function optionSelected(answer) {
 }
 
 function show_result() {
-    rules.classList.remove('activeInfo')
     quizBox.classList.remove('activeQuiz')
     resultBox.classList.add('activeResult')
     const score = resultBox.querySelector('.score_text')
@@ -165,48 +140,6 @@ function show_result() {
     }
 }
 
-function startTimer(time) {
-    counter = setInterval(timer, 1000)
-    function timer() {
-        timeCount.textContent = time
-        time--
-
-        if(time < 9) {
-            let addZero = timeCount.textContent
-            timeCount.textContent = "0" + addZero
-        }
-
-        if(time < 0) {
-            clearInterval(counter)
-            timeText.textContent = "Time off"
-            const allOptions = optionsList.children.answer
-            for(i = 0; i < allOptions; i++) {
-                if (optionsList.children[1].textContent == correctAnswer) {
-                    optionsList.children[i].setAttribute('class', 'option correct')
-                    optionsList.children[i].insertAdjacentHTML('beforeend', tickIcon)
-                    console.log('Time Off: Auto selected correct answer')
-                }
-            }
-
-            for (i=0; i < allOptions; i++) {
-                optionsList.children[i].classList.add('disabled')
-            }
-
-            nextBtn.classList.add('show')
-        }
-    }
-}
-
-function startTimerLine(time) {
-    counterLine = setInterval(timer, 25)
-    function timer() {
-        time += 1
-        timeLine.style.width = time + "px"
-        if (time > 649) {
-            clearTimeout(counterLine)
-        }
-    }
-}
 
 function queCounter(index) {
     let totalQueCounTag = '<span><p>' + index + '</p> of <p>' + quiz.questions.length + '</p> Questions</span>'
