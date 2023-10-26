@@ -10,6 +10,8 @@ packages = [{include = "quizhero_app"}]
 python = "^3.10"
 django = "^4.2.5"
 prettyconf = "^2.2.1"
+gunicorn = "*"
+whitenoise = "^6.6.0"
 
 
 [tool.poetry.group.dev.dependencies]
