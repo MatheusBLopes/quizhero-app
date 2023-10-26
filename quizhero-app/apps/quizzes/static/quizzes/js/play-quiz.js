@@ -42,8 +42,8 @@ leave.onclick = () => {
     window.location.reload();
 }
 
-const nextBtn = document.querySelector('footer .next_btn'),
-question_counter_down = document.querySelector('footer .total_que');
+const nextBtn = document.querySelector('#footer .next_btn'),
+question_counter_down = document.querySelector('#footer .total_que');
 
 nextBtn.onclick = () => {
     if(queCount < quiz.questions.length - 1) {

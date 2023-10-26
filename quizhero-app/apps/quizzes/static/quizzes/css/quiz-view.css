@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 
-.start_btn,.quiz_box,.result_box {
+.result_box {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -9,61 +9,36 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)
 }
 
-.start_btn {
-    box-shadow: none;
-}
 
 .quiz_box.activeQuiz,.result_box.activeResult {
-    opacity: 1;
-    z-index: 5;
     pointer-events: auto;
-    transform: translate(-50%, -50%) scale(1);
-}
-
-.start_btn button {
-    font-size: 25px;
-    font-weight: 500;
-    color: #032954;
-    height: 150px;
-    width: 150px;
-    outline: none;
-    border: none;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
 }
 
 .quiz_box {
-    width: 650px;
-    background: #fff;
-    border-radius: 10px;
-    transform: translate(-50%, -50%) scale(0.9);
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
+    background: var(--bs-bg); /* Use Bootstrap's background variable */
+    color: var(--bs-color); /* Use Bootstrap's text color variable */
+    margin-top: 100px;
+    border: 1px solid white;
 }
 
 .quiz_box header {
-    position: relative;
-    z-index: 2;
     height: 70px;
     padding: 0 30px;
-    background: #fff;
-    border-radius: 5px 5px 0 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 3px 5px 1px rgba(0,0,0,0.1);
+    border-bottom: 1px solid white;
 }
 
 .quiz_box header .title {
     font-size: 20px;
     font-weight: 600;
+    
 }
 
 section {
     padding: 25px 30px 20px 30px;
-    background: #fff;
+    background: var(--bs-bg);
 }
 
 section .que_text {
@@ -73,12 +48,12 @@ section .que_text {
 
 section .options_list {
     padding: 20px 0;
-    display: block:
+    display: block;
 }
 
 section .options_list .option {
-    background: #f5f5f5;
-    border: 1px solid #0e2954;
+    background: var(--bs-bg);
+    border: 1px solid lightgray;
     border-radius: 10px;
     padding: 8px 15px;
     font-size: 17px;
@@ -95,9 +70,9 @@ section .options_list .option:last-child {
 }
 
 section .options_list .option:hover {
-    color: #008514;
-    background: #cce5ff;
-    border: 1px solid #b8daff;
+    background: #fff;
+    color: #0e2954;
+    font-weight: bold;
 }
 
 section .options_list .option.correct {
@@ -141,42 +116,42 @@ section .options_list .option .icon {
     border-color: #a42834;
 }
 
-footer {
+/* FOOTER */
+
+#footer {
     height: 60px;
     padding: 0 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-top: 1px solid lightgray;
-    background-color: #1f6e8c;
+    background: var(--bs-bg)
 }
 
-footer .total_que span {
+#footer .total_que span {
     display: flex;
     use-select: none;
 }
 
-footer .total_que span p {
+#footer .total_que span p {
     font-weight: 800;
     padding: 0 5px;
-    color: #00eeff;
 }
 
-footer .total_que span p:first-child {
-    padding-left: 0;
+#footer .total_que span p:first-child {
+
 }
 
-footer button {
+#footer button {
     height: 40px;
     width: 80px;
     font-size: 18px;
     font-weight: 400;
     cursor: pointer;
-    border: 1px solid #007bff;
+    border: 1px solid lightgray;
     outline: none;
-    color: #fff;
     border-radius: 5px;
-    background-color: #0e2954;
+    background-color: var(--bs-bg);
     line-height: 10px;
     opacity: 1;
     pointer-events: none;
@@ -184,17 +159,19 @@ footer button {
     transition: all 0.3s ease;
 }
 
-footer button:hover {
+#footer button:hover {
     background: #fff;
     color: #0e2954;
     font-weight: bold;
 }
 
-footer button.show {
+#footer button.show {
     opacity: 1;
     pointer-events: auto;
     transform: scale(1);
 }
+
+/* RESULT BOX */
 
 .result_box {
     background: #fff;
