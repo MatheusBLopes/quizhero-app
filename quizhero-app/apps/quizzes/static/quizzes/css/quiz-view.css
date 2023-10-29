@@ -1,16 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 
-.result_box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)
-}
-
-
-.quiz_box.activeQuiz,.result_box.activeResult {
+.quiz_box.activeQuiz {
     pointer-events: auto;
 }
 
@@ -128,18 +119,15 @@ section .options_list .option .icon {
     background: var(--bs-bg)
 }
 
-#footer .total_que span {
+#footer .total_que span, p {
     display: flex;
-    use-select: none;
+    align-items: center;
 }
 
 #footer .total_que span p {
     font-weight: 800;
     padding: 0 5px;
-}
-
-#footer .total_que span p:first-child {
-
+    margin-top: 15px;
 }
 
 #footer button {
@@ -154,7 +142,7 @@ section .options_list .option .icon {
     background-color: var(--bs-bg);
     line-height: 10px;
     opacity: 1;
-    pointer-events: none;
+    pointer-events: auto;
     transform: scale(0.95);
     transition: all 0.3s ease;
 }
@@ -163,97 +151,4 @@ section .options_list .option .icon {
     background: #fff;
     color: #0e2954;
     font-weight: bold;
-}
-
-#footer button.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: scale(1);
-}
-
-/* RESULT BOX */
-
-.result_box {
-    background: #fff;
-    border-radius: 10px;
-    display: flex;
-    padding: 20px 35px;
-    width: 400px;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    transform: translate(-50%, -50%) scale(0.9);
-    pointer-events: none;
-    transition: all 0.3s ease;
-    opacity: 0;
-}
-
-.result_box .icon {
-    font-size: 100px;
-    color: #0e2954;
-    margin-bottom: 10px;
-}
-
-.result_box .complete_text {
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.result_box .score_text span {
-    display: flex;
-    margin: 10px;
-    font-size: 18px;
-    font-weight: 500;
-}
-
-.result_box .score_text span p {
-    padding: 0 4px;
-    font-weight: 600;
-}
-
-.result_box .buttons {
-    display: flex;
-    margin: 20px 0;
-}
-
-.result_box .buttons button {
-    margin: 0 10px;
-    height: 45px;
-    padding: 0 20px;
-    font-size: 18px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    border: 1px solid #007bff;
-    transition: all 0.3s ease;
-}
-
-.buttons button.restart {
-    font-size: 18px;
-    color: #0e2954;
-    background: #fff;
-    border: none;
-    outline: none;
-}
-
-.buttons button.restart:hover {
-    color: #fff;
-    background: #0e2954;
-    font-size: 19px;
-}
-
-.buttons button.quit {
-    color: #1565c0;
-    background: #fff;
-    border: none;
-    outline: none;
-}
-
-.buttons button.quit:hover {
-    font-size: 18px;
-    color: #fff;
-    background: #d32f2f;
-
 }

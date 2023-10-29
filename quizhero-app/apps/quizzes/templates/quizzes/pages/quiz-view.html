@@ -11,7 +11,7 @@
 {% block content %}
 <div class="quiz_box">
     <header>
-        <div class="title">Answer the Questions</div>
+        <div class="title">{{ quiz.title }}</div>
     </header>
     <section>
         <div class="que_text"></div>
@@ -19,20 +19,12 @@
     </section>
     <div id="footer">
         <div class="total_que"></div>
-        <button class="next_btn">Next</button>
-    </div>
-</div>
 
-<div class="result_box">
-    <div class="icon">
-        <i class="fas fa-trophy"></i>
-    </div>
+        <div class="footer_buttons">
+            <button class="back_btn">Back</button>
+            <button class="next_btn">Next</button>
+        </div>
 
-    <div class="complete_text">You've completed the quiz</div>
-    <div class="score_text"></div>
-    <div class="buttons">
-        <button class="restart">Replay Quiz</button>
-        <button class="quit">Quit Quiz</button>
     </div>
 </div>
 {% endblock content %}

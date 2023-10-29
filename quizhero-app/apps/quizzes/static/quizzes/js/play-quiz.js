@@ -3,17 +3,11 @@ const quiz = JSON.parse(
   );
 
 const quizBox = document.querySelector('.quiz_box'),
-resultBox = document.querySelector('.result_box'),
-optionsList = document.querySelector('.options_list'),
-restartQuiz = resultBox.querySelector('.buttons .restart'),
-leave = resultBox.querySelector('.buttons .quit');
-
+optionsList = document.querySelector('.options_list')
 
 let queCount = 0,
 queNumber = 1,
 userRating = 0,
-counter,
-counterLine,
 widthValue = 0;
 
 window.onload = function() {
@@ -23,27 +17,20 @@ window.onload = function() {
 };
 
 
-restartQuiz.onclick = () => {
-    quizBox.classList.add("activeQuiz");
-    resultBox.classList.remove("activeResult");
-    queCount = 0;
-    queNumber = 1;
-    userRating = 0;
-    widthValue = 0;
-    show_questions(queCount)
-    queCounter(queNumber);
-    clearInterval(counter);
-    clearInterval(counterLine);
-    timeText.textContent = "Time Left";
-    nextBtn.classList.remove('show')
-}
-
-leave.onclick = () => {
-    window.location.reload();
-}
-
 const nextBtn = document.querySelector('#footer .next_btn'),
 question_counter_down = document.querySelector('#footer .total_que');
+
+const backBtn = document.querySelector('#footer .back_btn');
+
+backBtn.onclick = () => {
+    if(queCount > 0) {
+        queCount--;
+        queNumber--;
+        show_questions(queCount);
+        queCounter(queNumber);
+    }
+}
+
 
 nextBtn.onclick = () => {
     if(queCount < quiz.questions.length - 1) {
@@ -51,13 +38,6 @@ nextBtn.onclick = () => {
         queNumber++;
         show_questions(queCount);
         queCounter(queNumber);
-        clearInterval(counter);
-        clearInterval(counterLine);
-        nextBtn.classList.remove("show")
-    } else {
-        clearInterval(counter);
-        clearInterval(counterLine);
-        show_result()
     }
 }
 
@@ -84,8 +64,6 @@ let tickIcon = '<div class="icon tick"><i class="fas fa-check"></i></div>'
 let crossIcon = '<div class="icon cross"><i class="fas fa-times"></i></div>'
 
 function optionSelected(answer) {
-    clearInterval(counter)
-    clearInterval(counterLine)
 
     let userAnswer = answer.textContent
     let correctAnswer = quiz.questions[queCount]
@@ -120,26 +98,8 @@ function optionSelected(answer) {
     for (i=0; i < allOptions; i++) {
         optionsList.children[i].classList.add('disabled')
     }
-    nextBtn.classList.add('show')
+
 }
-
-function show_result() {
-    quizBox.classList.remove('activeQuiz')
-    resultBox.classList.add('activeResult')
-    const score = resultBox.querySelector('.score_text')
-
-    if (userRating > 3) {
-        let scoreTag = '<span>and congrats! , You got <p>' + userRating + '</p> out of <p>' + quiz.questions.length + '</p></span>'
-        score.innerHTML = scoreTag
-    } else if (userRating > 1) {
-        let scoreTag = '<span>and rice, You got <p>' + userRating + '</p> out of <p>' + quiz.questions.length + '</p></span>'
-        score.innerHTML = scoreTag
-    } else {
-        let scoreTag = '<span>and sorry! , You got only <p>' + userRating + '</p> out of <p>' + quiz.questions.length + '</p></span>'
-        score.innerHTML = scoreTag
-    }
-}
-
 
 function queCounter(index) {
     let totalQueCounTag = '<span><p>' + index + '</p> of <p>' + quiz.questions.length + '</p> Questions</span>'
