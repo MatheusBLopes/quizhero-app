@@ -11,7 +11,7 @@
 {% block content %}
 <div class="quiz_box">
     <header>
-        <div class="title">{{ quiz.title }}</div>
+        <div class="title">{{ quiz_name }}</div>
     </header>
     <section>
         <div class="que_text"></div>
@@ -30,6 +30,6 @@
 {% endblock content %}
 
 {% block scripts%}
-<script src="{% static 'quizzes/js/play-quiz.js' %}" defer data-quizzes="{{ quiz }}"></script>
+<script src="{% static 'quizzes/js/play-quiz.js' %}" defer data-quiz="{{ quiz_json }}"></script>
 {{ quiz|json_script }}
 {% endblock scripts %}

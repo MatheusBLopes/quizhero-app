@@ -1,0 +1,10 @@
+<!-- FILEPATH: /home/mblopes/Projects/Personal/unfinished-projects/quizhero-app/quizhero-app/apps/quizzes/templates/quizzes/pages/csv-upload.html -->
+
+<form method="post" enctype="multipart/form-data" action="{% url 'create-quiz' %}">
+    {% csrf_token %}
+    <div>
+        <label for="csv_file">Upload CSV file:</label>
+        <input type="file" name="csv_file" id="csv_file">
+    </div>
+    <button type="submit">Upload</button>
+</form>

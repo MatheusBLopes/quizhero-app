@@ -1,11 +1,11 @@
 from django.urls import path
-from django.contrib import admin
 from . import views
 
 
 app_name = "quizzes"
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("", views.home, name="home"),
-    path('quizzes/<int:id>/', views.quiz, name="quiz")
+    path('quiz/<int:id>/', views.quiz, name="quiz"),
+    path('login/', views.MyLoginView.as_view(), name='login'),
+    path('create-quiz/', views.upload_quiz_csv, name='create-quiz'),
 ]

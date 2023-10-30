@@ -1,6 +1,5 @@
-const quiz = JSON.parse(
-    document.currentScript.nextElementSibling.textContent
-  );
+const quiz = JSON.parse(document.currentScript.getAttribute('data-quiz'));
+console.log(quiz)
 
 const quizBox = document.querySelector('.quiz_box'),
 optionsList = document.querySelector('.options_list')
@@ -33,7 +32,7 @@ backBtn.onclick = () => {
 
 
 nextBtn.onclick = () => {
-    if(queCount < quiz.questions.length - 1) {
+    if(queCount < questions.length - 1) {
         queCount++;
         queNumber++;
         show_questions(queCount);
@@ -43,11 +42,11 @@ nextBtn.onclick = () => {
 
 function show_questions(index) {
     const queText = document.querySelector('.que_text')
-    let queTag = '<span>' + quiz.questions[index].numb + ". " + quiz.questions[index].question_description + '</span>'
-    let optionTag = '<div class="option"><span>'+ quiz.questions[index].answers[0].answer_description + '</span></div>'
-    + '<div class="option"><span>' + quiz.questions[index].answers[1].answer_description + '</span></div>'
-    + '<div class="option"><span>' + quiz.questions[index].answers[2].answer_description + '</span></div>'
-    + '<div class="option"><span>' + quiz.questions[index].answers[3].answer_description + '</span></div>'
+    let queTag = '<span>' + index + ". " + quiz.questions[index].description + '</span>'
+    let optionTag = '<div class="option"><span>'+ quiz.questions[index].alternatives[0] + '</span></div>'
+    + '<div class="option"><span>' + quiz.questions[index].alternatives[1] + '</span></div>'
+    + '<div class="option"><span>' + quiz.questions[index].alternatives[2] + '</span></div>'
+    + '<div class="option"><span>' + quiz.questions[index].alternatives[3] + '</span></div>'
 
     queText.innerHTML = queTag
 
@@ -60,48 +59,48 @@ function show_questions(index) {
     }
 }
 
-let tickIcon = '<div class="icon tick"><i class="fas fa-check"></i></div>'
-let crossIcon = '<div class="icon cross"><i class="fas fa-times"></i></div>'
+// let tickIcon = '<div class="icon tick"><i class="fas fa-check"></i></div>'
+// let crossIcon = '<div class="icon cross"><i class="fas fa-times"></i></div>'
 
-function optionSelected(answer) {
+// function optionSelected(answer) {
 
-    let userAnswer = answer.textContent
-    let correctAnswer = quiz.questions[queCount]
-    const allOptions = optionsList.children.length
+//     let userAnswer = answer.textContent
+//     let correctAnswer = questions[queCount].fields.correct_alternative
+//     const allOptions = optionsList.children.length
 
-    for (i = 0; i < quiz.questions[queCount].answers.length; i++) {
-        if(quiz.questions[queCount].answers[i].right_answer){
-            correctAnswer = quiz.questions[queCount].answers[i].answer_description
-        }
-    }
+//     for (i = 0; i < questions[queCount].answers.length; i++) {
+//         if(quiz.questions[queCount].answers[i].right_answer){
+//             correctAnswer = questions[queCount].answers[i].answer_description
+//         }
+//     }
 
-    if(userAnswer == correctAnswer) {
-        userRating += 1
-        answer.classList.add("correct")
-        answer.insertAdjacentHTML('beforeend', tickIcon)
-        console.log('Correct Answer')
-        console.log('Your correct answers = ' + userRating)
-    } else {
-        answer.classList.add('incorrect')
-        answer.insertAdjacentHTML('beforeend', crossIcon)
-        console.log('Wrong Answer')
+//     if(userAnswer == correctAnswer) {
+//         userRating += 1
+//         answer.classList.add("correct")
+//         answer.insertAdjacentHTML('beforeend', tickIcon)
+//         console.log('Correct Answer')
+//         console.log('Your correct answers = ' + userRating)
+//     } else {
+//         answer.classList.add('incorrect')
+//         answer.insertAdjacentHTML('beforeend', crossIcon)
+//         console.log('Wrong Answer')
 
-        for (i=0; i < allOptions; i++) {
-            if (optionsList.children[i].textContent == correctAnswer) {
-                optionsList.children[i].setAttribute('class', 'option correct')
-                optionsList.children[i].insertAdjacentHTML('beforeend', tickIcon)
-                console.log('Auto selected correct answer')
-            }
-        }
-    }
+//         for (i=0; i < allOptions; i++) {
+//             if (optionsList.children[i].textContent == correctAnswer) {
+//                 optionsList.children[i].setAttribute('class', 'option correct')
+//                 optionsList.children[i].insertAdjacentHTML('beforeend', tickIcon)
+//                 console.log('Auto selected correct answer')
+//             }
+//         }
+//     }
 
-    for (i=0; i < allOptions; i++) {
-        optionsList.children[i].classList.add('disabled')
-    }
+//     for (i=0; i < allOptions; i++) {
+//         optionsList.children[i].classList.add('disabled')
+//     }
 
-}
+// }
 
-function queCounter(index) {
-    let totalQueCounTag = '<span><p>' + index + '</p> of <p>' + quiz.questions.length + '</p> Questions</span>'
-    question_counter_down.innerHTML = totalQueCounTag
-}
+// function queCounter(index) {
+//     let totalQueCounTag = '<span><p>' + index + '</p> of <p>' + quiz.questions.length + '</p> Questions</span>'
+//     question_counter_down.innerHTML = totalQueCounTag
+// }
