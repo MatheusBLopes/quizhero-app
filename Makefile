@@ -3,6 +3,12 @@ PROJECT_NAME = $(shell pwd | rev | cut -f1 -d'/' - | rev)
 runserver:
 	poetry run python quizhero-app/manage.py runserver
 
+migrate:
+	poetry run python quizhero-app/manage.py migrate
+
+makemigrations:
+	poetry run python quizhero-app/manage.py makemigrations
+
 lint:
 	poetry run pre-commit run --all-files
 
