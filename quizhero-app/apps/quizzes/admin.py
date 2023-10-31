@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import Quiz, Question, QuestionAlternative
+from .models import Question, QuestionAlternative, Quiz
 
 
 class QuestionAdminForm(forms.ModelForm):
@@ -14,6 +14,19 @@ class QuestionAdminForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super(QuestionAdminForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:
+            alternatives = self.instance.questionalternative_set.all()
+            self.fields['alternative_a'].initial = alternatives[0].description
+            self.fields['alternative_b'].initial = alternatives[1].description
+            self.fields['alternative_c'].initial = alternatives[2].description
+            self.fields['alternative_d'].initial = alternatives[3].description
+            
+            correct_alternative = alternatives.filter(is_correct=True).first()
+            correct_alternative_index = list(alternatives).index(correct_alternative)
+            self.fields['correct_alternative'].initial = str(correct_alternative_index + 1)
 
     def save(self, commit=True):
         question = super().save(commit=False)
@@ -28,15 +41,30 @@ class QuestionAdminForm(forms.ModelForm):
             self.cleaned_data['alternative_d']
         ]
 
+        existing_alternatives = list(question.questionalternative_set.all())
+
         for i, alternative in enumerate(alternatives):
             is_correct = i == correct_alternative_index
-            QuestionAlternative.objects.create(question=question, description=alternative, is_correct=is_correct)
+            if i < len(existing_alternatives):
+                # Update existing alternative
+                existing_alternative = existing_alternatives[i]
+                existing_alternative.description = alternative
+                existing_alternative.is_correct = is_correct
+                existing_alternative.save()
+            else:
+                # Create new alternative
+                QuestionAlternative.objects.create(question=question, description=alternative, is_correct=is_correct)
 
         return question
 
 class QuestionAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
+    list_display = ('description',)
 
 
-admin.site.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
+admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)
