@@ -14,10 +14,10 @@ window.onload = function () {
     queCounter(1);
 };
 
-const nextBtn = document.querySelector('#footer .next_btn'),
-    question_counter_down = document.querySelector('#footer .total_que');
+const nextBtn = document.querySelector('.question-footer .next_btn'),
+    question_counter_down = document.querySelector('.question-footer .total_que');
 
-const backBtn = document.querySelector('#footer .back_btn');
+const backBtn = document.querySelector('.question-footer .back_btn');
 
 backBtn.onclick = () => {
     if (queCount > 0) {

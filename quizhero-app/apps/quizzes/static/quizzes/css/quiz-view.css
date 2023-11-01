@@ -109,7 +109,7 @@ section .options_list .option .icon {
 
 /* FOOTER */
 
-#footer {
+.question-footer {
     height: 60px;
     padding: 0 30px;
     display: flex;
@@ -119,36 +119,13 @@ section .options_list .option .icon {
     background: var(--bs-bg)
 }
 
-#footer .total_que span, p {
+.question-footer .total_que span, p {
     display: flex;
     align-items: center;
 }
 
-#footer .total_que span p {
+.question-footer .total_que span p {
     font-weight: 800;
     padding: 0 5px;
     margin-top: 15px;
-}
-
-#footer button {
-    height: 40px;
-    width: 80px;
-    font-size: 18px;
-    font-weight: 400;
-    cursor: pointer;
-    border: 1px solid lightgray;
-    outline: none;
-    border-radius: 5px;
-    background-color: var(--bs-bg);
-    line-height: 10px;
-    opacity: 1;
-    pointer-events: auto;
-    transform: scale(0.95);
-    transition: all 0.3s ease;
-}
-
-#footer button:hover {
-    background: #fff;
-    color: #0e2954;
-    font-weight: bold;
 }
