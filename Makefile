@@ -20,3 +20,6 @@ test:
 
 collect-static:
 	poetry run python quizhero-app/manage.py collectstatic
+
+createsuperuser:
+	poetry run python quizhero-app/manage.py createsuperuser
