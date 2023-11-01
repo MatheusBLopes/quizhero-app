@@ -1,0 +1,44 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: |
+        docker build -t quizhero-app .
+
+    - name: Save Docker image
+      run: |
+        docker save quizhero-app > quizhero-app.tar
+
+    - name: Upload Docker image to EC2
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "quizhero-app.tar"
+        target: "~/ec2-user/quizhero"
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          cd ~/ec2-user/quizhero
+          docker load < quizhero-app.tar
+          docker stop quizhero-app || true
+          docker rm quizhero-app || true
+          docker run -d --name quizhero-app -p 8000:8000 quizhero-app
