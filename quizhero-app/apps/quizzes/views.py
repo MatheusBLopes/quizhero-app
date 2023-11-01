@@ -6,9 +6,9 @@ from django.contrib.auth.views import LoginView
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
-from utils.factory import make_quiz
 
-from .models import Question, Quiz, QuestionAlternative
+from .models import Question, QuestionAlternative, Quiz
+
 
 def serialize_quiz(quiz):
     quiz_data = {

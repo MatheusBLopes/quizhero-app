@@ -23,3 +23,9 @@ collect-static:
 
 createsuperuser:
 	poetry run python quizhero-app/manage.py createsuperuser
+
+seed:
+	poetry run python quizhero-app/manage.py seed
+
+clean-seed:
+	poetry run python quizhero-app/manage.py seed --clean
