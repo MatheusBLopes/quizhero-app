@@ -1,0 +1,40 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Create JSON Quiz | {% endblock title %}
+
+{% block content %}
+<h1>Create JSON Quiz</h1>
+
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<form method="post" action="{% url 'quizzes:create-json-quiz' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="jsonInput">Quiz JSON:</label>
+        <textarea id="jsonInput" name="quiz_json" class="form-control mt-3 mb-3" rows="10" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Quiz</button>
+</form>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach((alert) => {
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        });
+    });
+</script>
+{% endblock content %}

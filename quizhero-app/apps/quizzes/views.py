@@ -1,11 +1,14 @@
 import csv
 import json
+from urllib.parse import parse_qs
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Question, QuestionAlternative, Quiz
 
@@ -61,3 +64,47 @@ def quiz(request, id):
 
 class MyLoginView(LoginView):
     template_name = 'quizzes/pages/login.html'
+
+
+@login_required
+def create_quiz_with_json(request):
+    if request.method == 'GET':
+        return render(request, 'quizzes/pages/create-json-quiz.html')
+    if request.method == 'POST':
+        body_unicode = request.body.decode('utf-8')
+        body = parse_qs(body_unicode)
+        
+        quiz_json = body.get('quiz_json')
+        if not quiz_json:
+            messages.error(request, 'Missing quiz_json parameter')
+            return render(request, 'quizzes/pages/create-json-quiz.html')
+        
+        try:
+            quiz_data = json.loads(quiz_json[0])
+            quiz_name = quiz_data['name']
+            quiz_description = quiz_data['description']
+            questions_data = quiz_data['questions']
+        except (KeyError, json.JSONDecodeError):
+            messages.error(request, 'Invalid JSON payload')
+            return render(request, 'quizzes/pages/create-json-quiz.html')
+        
+        # Create the quiz
+        quiz = Quiz.objects.create(name=quiz_name, description=quiz_description, user=request.user)
+        
+        # Create the questions and alternatives
+        for question_data in questions_data:
+            question_description = question_data['description']
+            alternatives_data = question_data['alternatives']
+            
+            question = Question.objects.create(description=question_description, quiz=quiz)
+            
+            for alternative_data in alternatives_data:
+                alternative_description = alternative_data['description']
+                is_correct = alternative_data['is_correct']
+                
+                QuestionAlternative.objects.create(description=alternative_description, is_correct=is_correct, question=question)
+        
+        messages.success(request, 'Quiz created successfully')
+        return render(request, 'quizzes/pages/create-json-quiz.html')
+    else:
+        return HttpResponseBadRequest('Invalid request method')
