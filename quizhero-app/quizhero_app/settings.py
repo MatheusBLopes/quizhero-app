@@ -89,6 +89,8 @@ DATABASES = {
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 
+# Logout
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 
