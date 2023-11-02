@@ -16,7 +16,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t quizhero-app .
+        docker build -t quizhero-app --build-arg ALLOWED_HOSTS=${{ secrets.SSH_HOST }} .
 
     - name: Save Docker image
       run: |
