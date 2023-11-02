@@ -16,7 +16,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t quizhero-app --build-arg ALLOWED_HOSTS=${{ secrets.SSH_HOST }} .
+        docker build -t quizhero-app --build-arg ALLOWED_HOSTS="['${{ secrets.SSH_HOST }}']" .
 
     - name: Save Docker image
       run: |
@@ -41,5 +41,5 @@ jobs:
           cd ~/quizhero
           docker load < quizhero-app.tar
           docker ps -q | xargs -r docker stop
-          docker rm $(docker ps -a -q)
+          docker ps -a -q | xargs -r docker rm
           docker run -d --name quizhero-app -p 8000:8000 quizhero-app

@@ -5,6 +5,7 @@ ENV LANG=C.UTF-8
 ENV SECRET_KEY=13521685416516
 
 ARG ALLOWED_HOSTS
+ENV ALLOWED_HOSTS=$ALLOWED_HOSTS
 
 RUN pip install poetry
 RUN apt-get update && apt-get install -y --no-install-recommends \
