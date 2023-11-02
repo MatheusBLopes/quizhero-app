@@ -19,16 +19,16 @@ resource "aws_instance" "quizhero_instance" {
     #!/bin/bash
 
     # Update the package list
-    sudo apt-get update
+    sudo yum update
 
     # Install Docker
-    sudo apt-get install -y docker.io
+    sudo yum install -y docker
 
     # Start Docker and enable it to start on boot
     sudo systemctl start docker
     sudo systemctl enable docker
 
-    # Add the `ubuntu` user to the `docker` group
+    # Add the `ec2-user` user to the `docker` group
     sudo usermod -aG docker ec2-user
 
     # Create a dedicated directory for the app
