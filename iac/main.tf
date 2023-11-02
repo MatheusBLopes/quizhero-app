@@ -10,7 +10,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "MyVPC"
+    Name = "MainVpc"
   }
 }
 
@@ -50,8 +50,16 @@ resource "aws_route_table_association" "a" {
   route_table_id = aws_route_table.main.id
 }
 
+
 resource "aws_security_group" "allow_all" {
   vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     from_port   = 0
@@ -72,26 +80,47 @@ resource "aws_security_group" "allow_all" {
   }
 }
 
-resource "aws_instance" "example" {
+resource "aws_key_pair" "quizhero_key_pair" {
+  key_name   = "quizhero_key_pair"
+  public_key = file("./quizhero-key-pair.pub")
+}
+
+resource "aws_instance" "quizhero_instance" {
   ami           = "ami-0df435f331839b2d6"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subnet_a.id
   vpc_security_group_ids = [aws_security_group.allow_all.id]
+  key_name      = aws_key_pair.quizhero_key_pair.key_name
 
   user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "<h1>Hello World from $(hostname -f)</h1>" > /var/www/html/index.html
-              EOF
+    #!/bin/bash
+
+    # Update the package list
+    sudo apt-get update
+
+    # Install Docker
+    sudo apt-get install -y docker.io
+
+    # Start Docker and enable it to start on boot
+    sudo systemctl start docker
+    sudo systemctl enable docker
+
+    # Add the `ubuntu` user to the `docker` group
+    sudo usermod -aG docker ec2-user
+
+    # Create a dedicated directory for the app
+    sudo mkdir /home/ec2-user/quizhero
+
+    # Set the owner and permissions for the app directory
+    sudo chown ec2-user:ec2-user /home/ec2-user/quizhero
+    sudo chmod 755 /home/ec2-user/quizhero
+  EOF
 
   tags = {
-    Name = "example-instance"
+    Name = "quizhero-instance"
   }
 }
 
-resource "aws_eip" "example" {
-  instance = aws_instance.example.id
+resource "aws_eip" "quizhero_ip" {
+  instance = aws_instance.quizhero_instance.id
 }
