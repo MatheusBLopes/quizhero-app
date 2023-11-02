@@ -40,6 +40,7 @@ jobs:
         script: |
           cd ~/quizhero
           docker load < quizhero-app.tar
-          docker stop quizhero-app || true
-          docker rm quizhero-app || true
+          docker stop $(docker ps -q)
+          docker rm $(docker ps -a -q)
+          docker rmi $(docker images -q)
           docker run -d --name quizhero-app -p 8000:8000 quizhero-app
