@@ -29,3 +29,18 @@ seed:
 
 clean-seed:
 	poetry run python quizhero-app/manage.py seed --clean
+
+# SSH
+generate-key:
+	ssh-keygen -t rsa -b 2048 -f quizhero-key-pair.pem
+
+
+change-permission:
+	chmod 400 ./iac/quizhero-key-pair.pem
+
+ssh:
+	ssh -i ./iac/quizhero-key-pair.pem ec2-user@----ip------
+
+# DOCKER
+run-container:
+	docker run -p 8000:8000 quizhero-app
