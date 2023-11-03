@@ -31,16 +31,37 @@ clean-seed:
 	poetry run python quizhero-app/manage.py seed --clean
 
 # SSH
-generate-key:
-	ssh-keygen -t rsa -b 2048 -f quizhero-key-pair.pem
+generate-prod-key:
+	cd iac/ && ssh-keygen -t rsa -b 2048 -f quizhero-prod-key-pair.pem
 
+generate-dev-key:
+	cd iac/ && ssh-keygen -t rsa -b 2048 -f quizhero-dev-key-pair.pem
 
 change-permission:
 	chmod 400 ./iac/quizhero-key-pair.pem
 
-ssh:
-	ssh -i ./iac/quizhero-key-pair.pem ec2-user@----ip------
+dev-ssh:
+	cd iac/ && ssh -i ./iac/quizhero-dev-key-pair.pem ec2-user@----ip------
+
+prod-ssh:
+	cd iac/ && ssh -i ./iac/quizhero-prod-key-pair.pem ec2-user@----ip------
 
 # DOCKER
 run-container:
 	docker run -p 8000:8000 quizhero-app
+
+
+# TERRAFORM
+
+tf-dev-env:
+	cd iac/ && terraform workspace select dev
+
+tf-apply-dev:
+	cd iac/ terraform apply -var-file=vars-dev.tfvars
+	
+tf-prod-env:
+	cd iac/ && terraform workspace select prod
+
+tf-apply-prod:
+	cd iac/ terraform apply -var-file=vars-prod.tfvars
+

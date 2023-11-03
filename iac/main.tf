@@ -1,16 +1,11 @@
-provider "aws" {
-  region  = "us-east-1"
-  # You might need to specify other configurations such as access and secret keys.
-}
-
 resource "aws_key_pair" "quizhero_key_pair" {
   key_name   = "quizhero_key_pair"
-  public_key = file("./quizhero-key-pair.pub")
+  public_key = file(var.key_file_path)
 }
 
 resource "aws_instance" "quizhero_instance" {
-  ami           = "ami-0df435f331839b2d6"
-  instance_type = "t2.micro"
+  ami           = var.ami
+  instance_type = var.instance_type
   subnet_id     = aws_subnet.subnet_a.id
   vpc_security_group_ids = [aws_security_group.allow_all.id]
   key_name      = aws_key_pair.quizhero_key_pair.key_name

@@ -1,6 +1,6 @@
 # Create VPC
 resource "aws_vpc" "main" {
-  cidr_block           = "172.31.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -17,8 +17,8 @@ resource "aws_internet_gateway" "gw" {
 # Create a subnet (you can replicate this block for other subnets)
 resource "aws_subnet" "subnet_a" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "172.31.32.0/20" # Specify CIDR block for the subnet, e.g., "172.31.1.0/24"
-  availability_zone = "us-east-1a" # For other subnets, change this to respective AZs
+  cidr_block = var.public_subnet_cidr
+  availability_zone = var.availability_zone
 
   tags = {
     Name = "MySubnetA"

@@ -68,3 +68,7 @@ docs/_build/
 *.tfstate.*
 *.tfplan
 .terraform/
+
+
+# Keys
+*.csv
