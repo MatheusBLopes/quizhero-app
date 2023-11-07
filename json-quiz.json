@@ -1,0 +1,48 @@
+{
+  "name": "Sample Quiz",
+  "description": "This is a sample quiz",
+  "questions": [
+    {
+      "description": "What is the capital of France?",
+      "alternatives": [
+        {
+          "description": "Berlin",
+          "is_correct": false
+        },
+        {
+          "description": "Madrid",
+          "is_correct": false
+        },
+        {
+          "description": "Paris",
+          "is_correct": true
+        },
+        {
+          "description": "Lisbon",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "description": "Which planet is known as the Red Planet?",
+      "alternatives": [
+        {
+          "description": "Earth",
+          "is_correct": false
+        },
+        {
+          "description": "Mars",
+          "is_correct": true
+        },
+        {
+          "description": "Jupiter",
+          "is_correct": false
+        },
+        {
+          "description": "Saturn",
+          "is_correct": false
+        }
+      ]
+    }
+  ]
+}
