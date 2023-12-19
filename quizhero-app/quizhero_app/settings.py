@@ -29,7 +29,8 @@ SECRET_KEY = config("SECRET_KEY", default="")
 DEBUG = True
 
 
-ALLOWED_HOSTS = ast.literal_eval(config("ALLOWED_HOSTS", default="[]"))
+# ALLOWED_HOSTS = ast.literal_eval(config("ALLOWED_HOSTS", default="[]"))
+ALLOWED_HOSTS = ["*"]
 
 
 
