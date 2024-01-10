@@ -1,14 +1,10 @@
-import csv
 import json
 from urllib.parse import parse_qs
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.core import serializers
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, render
 
 from .models import Question, QuestionAlternative, Quiz, QuizFolder
 
@@ -44,7 +40,7 @@ def serialize_quiz(quiz):
 
 @login_required
 def home(request):
-    folders_with_quizzes = QuizFolder.objects.filter(quizzes__user=request.user).prefetch_related('quizzes')
+    folders_with_quizzes = QuizFolder.objects.filter(quizzes__user=request.user).distinct().prefetch_related('quizzes')
 
     return render(request, 'quizzes/pages/home.html', context={
         'folders_with_quizzes': folders_with_quizzes,
