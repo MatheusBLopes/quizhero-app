@@ -1,106 +1,75 @@
 import json
-from urllib.parse import parse_qs
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
+from rest_framework import serializers
 
 from .models import Question, QuestionAlternative, Quiz, QuizFolder
 
+class QuestionAlternativeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionAlternative
+        fields = ['id', 'description', 'is_correct']
 
-def serialize_quiz(quiz):
-    quiz_data = {
-        'id': quiz.id,
-        'name': quiz.name,
-        'description': quiz.description,
-        'questions': [],
-    }
+class QuestionSerializer(serializers.ModelSerializer):
+    alternatives = QuestionAlternativeSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Question
+        fields = ['id', 'description', 'alternatives']
     
-    questions = quiz.question_set.all()
-    for question in questions:
-        question_data = {
-            'id': question.id,
-            'description': question.description,
-            'alternatives': [],
-        }
-        
-        alternatives = question.questionalternative_set.all()
-        for alternative in alternatives:
-            alternative_data = {
-                'id': alternative.id,
-                'description': alternative.description,
-                'is_correct': alternative.is_correct,
-            }
-            question_data['alternatives'].append(alternative_data)
-        
-        quiz_data['questions'].append(question_data)
-    
-    return json.dumps(quiz_data)
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['alternatives'] = QuestionAlternativeSerializer(instance.questionalternative_set.all(), many=True).data
+        return representation
+
+class QuizSerializer(serializers.ModelSerializer):
+    questions = QuestionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Quiz
+        fields = ['id', 'name', 'description', 'questions']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['questions'] = QuestionSerializer(instance.question_set.all(), many=True).data
+        return representation
 
 @login_required
 def home(request):
     folders_with_quizzes = QuizFolder.objects.filter(quizzes__user=request.user).distinct().prefetch_related('quizzes')
-
-    return render(request, 'quizzes/pages/home.html', context={
-        'folders_with_quizzes': folders_with_quizzes,
-    })
-
+    return render(request, 'quizzes/pages/home.html', context={'folders_with_quizzes': folders_with_quizzes})
 
 @login_required
 def quiz(request, id):
     quiz = get_object_or_404(Quiz.objects.prefetch_related('question_set__questionalternative_set'), id=id)
-    quiz_json = serialize_quiz(quiz)
-
-    context = {
-        'quiz_json': quiz_json,
-        'quiz_name': quiz.name
-    }
-    return render(request, 'quizzes/pages/quiz-view.html', context=context)
-
+    quiz_serializer = QuizSerializer(quiz)
+    return render(request, 'quizzes/pages/quiz-view.html', context={'quiz_json': json.dumps(quiz_serializer.data), 'quiz_name': quiz.name})
 
 class MyLoginView(LoginView):
     template_name = 'quizzes/pages/login.html'
-
 
 @login_required
 def create_quiz_with_json(request):
     if request.method == 'GET':
         return render(request, 'quizzes/pages/create-json-quiz.html')
-    if request.method == 'POST':
-        body_unicode = request.body.decode('utf-8')
-        body = parse_qs(body_unicode)
-        
-        quiz_json = body.get('quiz_json')
+    elif request.method == 'POST':
+        quiz_json = request.POST.get('quiz_json')
         if not quiz_json:
             messages.error(request, 'Missing quiz_json parameter')
             return render(request, 'quizzes/pages/create-json-quiz.html')
-        
+
         try:
-            quiz_data = json.loads(quiz_json[0])
-            quiz_name = quiz_data['name']
-            quiz_description = quiz_data['description']
-            questions_data = quiz_data['questions']
-        except (KeyError, json.JSONDecodeError):
+            quiz_data = json.loads(quiz_json)
+            quiz_serializer = QuizSerializer(data=quiz_data)
+            quiz_serializer.is_valid(raise_exception=True)
+            quiz_serializer.save(user=request.user)
+        except (KeyError, json.JSONDecodeError, serializers.ValidationError):
             messages.error(request, 'Invalid JSON payload')
             return render(request, 'quizzes/pages/create-json-quiz.html')
-        
-        # Create the quiz
-        quiz = Quiz.objects.create(name=quiz_name, description=quiz_description, user=request.user)
-        
-        # Create the questions and alternatives
-        for question_data in questions_data:
-            question_description = question_data['description']
-            alternatives_data = question_data['alternatives']
-            
-            question = Question.objects.create(description=question_description, quiz=quiz)
-            
-            for alternative_data in alternatives_data:
-                alternative_description = alternative_data['description']
-                is_correct = alternative_data['is_correct']
-                
-                QuestionAlternative.objects.create(description=alternative_description, is_correct=is_correct, question=question)
-        
+
         messages.success(request, 'Quiz created successfully')
         return render(request, 'quizzes/pages/create-json-quiz.html')
     else:
