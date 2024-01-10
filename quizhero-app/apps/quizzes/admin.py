@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import Question, QuestionAlternative, Quiz
+from .models import Question, QuestionAlternative, Quiz, QuizFolder
 
 
 class QuestionAdminForm(forms.ModelForm):
@@ -65,6 +65,6 @@ class QuestionAdmin(admin.ModelAdmin):
 class QuizAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
-
+admin.site.register(QuizFolder)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)

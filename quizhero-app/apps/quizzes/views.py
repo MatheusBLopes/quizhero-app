@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Question, QuestionAlternative, Quiz
+from .models import Question, QuestionAlternative, Quiz, QuizFolder
 
 
 def serialize_quiz(quiz):
@@ -44,9 +44,10 @@ def serialize_quiz(quiz):
 
 @login_required
 def home(request):
-    quizzes = Quiz.objects.filter(user=request.user)
+    folders_with_quizzes = QuizFolder.objects.filter(quizzes__user=request.user).prefetch_related('quizzes')
+
     return render(request, 'quizzes/pages/home.html', context={
-        'quizzes': quizzes,
+        'folders_with_quizzes': folders_with_quizzes,
     })
 
 

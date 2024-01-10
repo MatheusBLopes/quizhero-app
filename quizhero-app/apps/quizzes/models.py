@@ -1,7 +1,13 @@
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.db import models
 
+class QuizFolder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=255)
+    quizzes = models.ManyToManyField('Quiz', related_name='folders')
+
+    def __str__(self):
+        return self.name
 
 class Quiz(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
