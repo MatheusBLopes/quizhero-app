@@ -15,6 +15,7 @@ gunicorn = "^21.2.0"
 gevent = "^23.9.1"
 psycopg2 = "^2.9.9"
 psycopg2-binary = "^2.9.9"
+djangorestframework = "^3.14.0"
 
 
 
