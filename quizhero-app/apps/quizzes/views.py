@@ -6,7 +6,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render
 from rest_framework import serializers
 
-from .models import Question, QuestionAlternative, Quiz, QuizFolder
+from .models import Question, QuestionAlternative, Quiz, QuizFolder, Category
 
 class QuestionAlternativeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,7 +40,8 @@ class QuizSerializer(serializers.ModelSerializer):
 @login_required
 def home(request):
     folders_with_quizzes = QuizFolder.objects.filter(quizzes__user=request.user).distinct().prefetch_related('quizzes')
-    return render(request, 'quizzes/pages/home.html', context={'folders_with_quizzes': folders_with_quizzes})
+    categories = Category.objects.all()
+    return render(request, 'quizzes/pages/home.html', context={'folders_with_quizzes': folders_with_quizzes, 'categories': categories})
 
 @login_required
 def quiz(request, id):
