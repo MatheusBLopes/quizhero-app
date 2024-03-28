@@ -29,12 +29,12 @@ class Quiz(models.Model):
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    description = models.CharField(max_length=255)
+    description = models.TextField(blank=False, null=False)
 
 
 class QuestionAlternative(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    description = models.CharField(max_length=255)
+    description = models.TextField(blank=False, null=False)
     is_correct = models.BooleanField(default=False)
 
 
